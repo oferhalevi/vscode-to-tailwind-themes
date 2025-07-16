@@ -1,0 +1,58 @@
+{
+  "name": "Monokai",
+  "type": "dark",
+  "colors": {
+    "editor.background": "#272822",
+    "editor.foreground": "#f8f8f2",
+    "editorCursor.foreground": "#f8f8f0",
+    "editor.lineHighlightBackground": "#3e3d32",
+    "editor.selectionBackground": "#49483e",
+    "sideBar.background": "#1e1f1c",
+    "statusBar.background": "#414339",
+    "button.background": "#75715e",
+    "terminal.ansiRed": "#f92672",
+    "terminal.ansiGreen": "#a6e22e",
+    "terminal.ansiYellow": "#f4bf75",
+    "terminal.ansiBlue": "#66d9ef",
+    "terminal.ansiMagenta": "#ae81ff",
+    "terminal.ansiCyan": "#a1efe4"
+  },
+  "tokenColors": [
+    {
+      "name": "Comment",
+      "scope": "comment",
+      "settings": {
+        "foreground": "#75715e",
+        "fontStyle": "italic"
+      }
+    },
+    {
+      "name": "Keyword",
+      "scope": "keyword",
+      "settings": {
+        "foreground": "#f92672"
+      }
+    },
+    {
+      "name": "String",
+      "scope": "string",
+      "settings": {
+        "foreground": "#e6db74"
+      }
+    },
+    {
+      "name": "Function",
+      "scope": "entity.name.function",
+      "settings": {
+        "foreground": "#a6e22e"
+      }
+    },
+    {
+      "name": "Number",
+      "scope": "constant.numeric",
+      "settings": {
+        "foreground": "#ae81ff"
+      }
+    }
+  ]
+}

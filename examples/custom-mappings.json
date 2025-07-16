@@ -1,0 +1,17 @@
+[
+  {
+    "vscodeKey": "panel.background",
+    "tailwindPath": "colors.panel.background",
+    "description": "Panel background color"
+  },
+  {
+    "vscodeKey": "panel.border",
+    "tailwindPath": "colors.panel.border",
+    "description": "Panel border color"
+  },
+  {
+    "vscodeKey": "editorWidget.background",
+    "tailwindPath": "colors.widget.background",
+    "description": "Editor widget background"
+  }
+]

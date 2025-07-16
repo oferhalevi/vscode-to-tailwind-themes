@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VSCode Dark+ Theme in Tailwind</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'background': '#1e1e1e',
+                        'foreground': '#d4d4d4',
+                        'cursor': '#aeafad',
+                        'selection': '#264f78',
+                        'lineHighlight': '#2a2d2e',
+                        'sidebar': {
+                            'background': '#252526',
+                            'foreground': '#cccccc',
+                            'title': '#cccccc'
+                        },
+                        'activityBar': {
+                            'background': '#333333',
+                            'foreground': '#ffffff',
+                            'active': '#007acc'
+                        },
+                        'statusBar': {
+                            'background': '#007acc',
+                            'foreground': '#ffffff'
+                        },
+                        'tab': {
+                            'active': '#1e1e1e',
+                            'inactive': '#2d2d30',
+                            'activeForeground': '#ffffff',
+                            'inactiveForeground': '#969696'
+                        },
+                        'button': {
+                            'primary': '#0e639c',
+                            'primaryText': '#ffffff',
+                            'primaryHover': '#1177bb'
+                        },
+                        'terminal': {
+                            'red': '#cd3131',
+                            'green': '#0dbc79',
+                            'yellow': '#e5e510',
+                            'blue': '#2472c8',
+                            'magenta': '#bc3fbc',
+                            'cyan': '#11a8cd'
+                        },
+                        'syntax': {
+                            'comment': '#6A9955',
+                            'variable': '#B5CEA8',
+                            'string': '#CE9178',
+                            'keyword': '#B5CEA8',
+                            'type': '#4EC9B0',
+                            'function': '#DCDCAA'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-background text-foreground min-h-screen">
+    <div class="flex h-screen">
+        <!-- Activity Bar -->
+        <div class="w-12 bg-activityBar-background text-activityBar-foreground flex flex-col items-center py-2">
+            <div class="w-6 h-6 bg-activityBar-active rounded mb-4"></div>
+            <div class="w-6 h-6 bg-gray-600 rounded mb-4"></div>
+            <div class="w-6 h-6 bg-gray-600 rounded"></div>
+        </div>
+        
+        <!-- Sidebar -->
+        <div class="w-64 bg-sidebar-background text-sidebar-foreground">
+            <div class="p-4 border-b border-gray-700">
+                <h2 class="text-sidebar-title font-semibold">Explorer</h2>
+            </div>
+            <div class="p-2">
+                <div class="py-1 px-2 hover:bg-lineHighlight rounded cursor-pointer">📁 src</div>
+                <div class="py-1 px-2 hover:bg-lineHighlight rounded cursor-pointer ml-4">📄 index.ts</div>
+                <div class="py-1 px-2 hover:bg-lineHighlight rounded cursor-pointer ml-4">📄 app.ts</div>
+                <div class="py-1 px-2 hover:bg-lineHighlight rounded cursor-pointer">📄 package.json</div>
+            </div>
+        </div>
+        
+        <!-- Main Editor Area -->
+        <div class="flex-1 flex flex-col">
+            <!-- Tabs -->
+            <div class="flex bg-tab-inactive">
+                <div class="px-4 py-2 bg-tab-active text-tab-activeForeground border-b-2 border-activityBar-active">
+                    index.ts
+                </div>
+                <div class="px-4 py-2 bg-tab-inactive text-tab-inactiveForeground">
+                    app.ts
+                </div>
+            </div>
+            
+            <!-- Editor Content -->
+            <div class="flex-1 p-4 font-mono text-sm">
+                <div class="space-y-1">
+                    <div><span class="text-syntax-comment">// VSCode Dark+ theme converted to Tailwind</span></div>
+                    <div><span class="text-syntax-keyword">import</span> <span class="text-syntax-variable">React</span> <span class="text-syntax-keyword">from</span> <span class="text-syntax-string">'react'</span>;</div>
+                    <div></div>
+                    <div><span class="text-syntax-keyword">interface</span> <span class="text-syntax-type">Props</span> {</div>
+                    <div class="ml-4"><span class="text-syntax-variable">title</span>: <span class="text-syntax-type">string</span>;</div>
+                    <div>}</div>
+                    <div></div>
+                    <div><span class="text-syntax-keyword">const</span> <span class="text-syntax-function">App</span> = <span class="text-syntax-operator">(</span><span class="text-syntax-variable">props</span>: <span class="text-syntax-type">Props</span><span class="text-syntax-operator">)</span> <span class="text-syntax-operator">=></span> {</div>
+                    <div class="ml-4"><span class="text-syntax-keyword">return</span> <span class="text-syntax-operator">(</span></div>
+                    <div class="ml-8"><span class="text-syntax-operator">&lt;</span><span class="text-syntax-keyword">div</span><span class="text-syntax-operator">&gt;</span></div>
+                    <div class="ml-12"><span class="text-syntax-operator">&lt;</span><span class="text-syntax-keyword">h1</span><span class="text-syntax-operator">&gt;</span>{<span class="text-syntax-variable">props</span>.<span class="text-syntax-variable">title</span>}<span class="text-syntax-operator">&lt;/</span><span class="text-syntax-keyword">h1</span><span class="text-syntax-operator">&gt;</span></div>
+                    <div class="ml-8"><span class="text-syntax-operator">&lt;/</span><span class="text-syntax-keyword">div</span><span class="text-syntax-operator">&gt;</span></div>
+                    <div class="ml-4"><span class="text-syntax-operator">)</span>;</div>
+                    <div>};</div>
+                </div>
+            </div>
+            
+            <!-- Status Bar -->
+            <div class="bg-statusBar-background text-statusBar-foreground px-4 py-1 text-sm flex items-center justify-between">
+                <div class="flex items-center space-x-4">
+                    <span>TypeScript</span>
+                    <span>UTF-8</span>
+                    <span>LF</span>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <span>Ln 12, Col 1</span>
+                    <span>Spaces: 2</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Demo Controls -->
+    <div class="fixed top-4 right-4 bg-sidebar-background p-4 rounded-lg shadow-lg">
+        <h3 class="text-sidebar-title font-semibold mb-3">Theme Demo</h3>
+        <div class="space-y-2">
+            <button class="w-full bg-button-primary text-button-primaryText px-3 py-2 rounded hover:bg-button-primaryHover transition-colors">
+                Primary Button
+            </button>
+            <div class="bg-terminal-background p-2 rounded text-xs">
+                <div><span class="text-terminal-green">✓</span> <span class="text-terminal-blue">npm</span> <span class="text-foreground">install</span></div>
+                <div><span class="text-terminal-yellow">⚠</span> <span class="text-terminal-red">Error:</span> <span class="text-foreground">File not found</span></div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
