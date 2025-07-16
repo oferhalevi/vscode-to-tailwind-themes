@@ -5,6 +5,7 @@ A powerful tool that converts Visual Studio Code themes into Tailwind CSS theme 
 ## Features
 
 - 🎨 **Complete Color Mapping**: Converts VSCode editor colors, syntax highlighting, and UI elements
+- 🌐 **URL Support**: Convert themes directly from GitHub URLs or any public URL
 - 🔧 **Flexible Configuration**: Supports custom color mappings and conversion options
 - 📁 **Multiple Output Formats**: Generate JavaScript or JSON configuration files
 - 🎯 **Semantic Token Support**: Includes semantic highlighting colors when available
@@ -27,8 +28,11 @@ yarn add vscode-to-tailwind-themes
 Convert a VSCode theme to Tailwind CSS:
 
 ```bash
-# Basic conversion
+# Basic conversion from file
 npx vscode-to-tailwind convert path/to/theme.json
+
+# Convert from URL
+npx vscode-to-tailwind convert https://raw.githubusercontent.com/user/theme-repo/main/theme.json
 
 # Specify output file and format
 npx vscode-to-tailwind convert theme.json -o tailwind.config.js -f js
@@ -40,11 +44,14 @@ npx vscode-to-tailwind convert theme.json --preserve-names
 npx vscode-to-tailwind convert theme.json --no-semantic
 ```
 
-Analyze a theme file:
+Analyze a theme file or URL:
 
 ```bash
-# Show basic theme information
+# Show basic theme information from file
 npx vscode-to-tailwind analyze theme.json
+
+# Analyze theme from URL
+npx vscode-to-tailwind analyze https://raw.githubusercontent.com/user/theme-repo/main/theme.json
 
 # Include token color details
 npx vscode-to-tailwind analyze theme.json --show-tokens
@@ -56,7 +63,36 @@ List available color mappings:
 npx vscode-to-tailwind list-mappings
 ```
 
-### Programmatic Usage
+## URL Support
+
+The converter now supports fetching themes directly from URLs, making it easy to convert themes from GitHub repositories or other online sources:
+
+```bash
+# Convert from GitHub raw URL
+npx vscode-to-tailwind convert https://raw.githubusercontent.com/username/theme-repo/main/theme.json
+
+# Convert from any public URL
+npx vscode-to-tailwind convert https://example.com/my-theme.json
+```
+
+### Supported URL Sources
+
+- **GitHub Raw URLs**: Direct links to theme files in GitHub repositories
+- **Public HTTP/HTTPS URLs**: Any publicly accessible theme file
+- **CDN URLs**: Theme files hosted on content delivery networks
+
+### URL Requirements
+
+- Must be a valid HTTP or HTTPS URL
+- Must return valid JSON content
+- Must be publicly accessible (no authentication required)
+
+The tool automatically handles common VSCode theme JSON issues like:
+- JSON comments (single-line `//` and multi-line `/* */`)
+- Trailing commas
+- Special characters in string values
+
+## Programmatic Usage
 
 ```typescript
 import { ThemeConverter } from 'vscode-to-tailwind-themes';
@@ -70,6 +106,12 @@ const converter = new ThemeConverter({
 // Convert a theme file
 const config = await converter.convertThemeFile(
   './dark-plus.json',
+  './tailwind.config.js'
+);
+
+// Convert from URL
+const urlConfig = await converter.convertThemeFile(
+  'https://raw.githubusercontent.com/username/theme-repo/main/theme.json',
   './tailwind.config.js'
 );
 
@@ -226,6 +268,11 @@ Contributions are welcome! Please feel free to submit a Pull Request. For major 
 MIT License - see the [LICENSE](LICENSE) file for details.
 
 ## Changelog
+
+### 1.1.0
+- ✨ **NEW**: URL Support - Convert themes directly from GitHub URLs and other public URLs
+- 🛠️ **Enhanced**: Improved JSON parsing to handle VSCode theme files with comments and trailing commas
+- 📖 **Updated**: Documentation with URL usage examples
 
 ### 1.0.0
 - Initial release

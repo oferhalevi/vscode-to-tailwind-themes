@@ -6,6 +6,7 @@ import * as fs from 'fs';
 import chalk from 'chalk';
 import { ThemeConverter } from './converter';
 import { ConversionOptions } from './types';
+import { isValidUrl } from './utils';
 
 const program = new Command();
 
@@ -16,8 +17,8 @@ program
 
 program
   .command('convert')
-  .description('Convert a VSCode theme file to Tailwind CSS configuration')
-  .argument('<input>', 'Path to VSCode theme JSON file')
+  .description('Convert a VSCode theme file or URL to Tailwind CSS configuration')
+  .argument('<input>', 'Path to VSCode theme JSON file or URL to theme file')
   .option('-o, --output <path>', 'Output file path (default: tailwind.config.js)')
   .option('-f, --format <format>', 'Output format: js or json', 'js')
   .option('--no-semantic', 'Exclude semantic token colors')
@@ -27,11 +28,15 @@ program
     try {
       console.log(chalk.blue('🎨 Converting VSCode theme to Tailwind CSS...'));
       
-      // Validate input file
-      if (!fs.existsSync(input)) {
-        console.error(chalk.red(`❌ Input file not found: ${input}`));
+      // Validate input (file or URL)
+      if (!isValidUrl(input) && !fs.existsSync(input)) {
+        console.error(chalk.red(`❌ Input file not found and not a valid URL: ${input}`));
         process.exit(1);
       }
+
+      // Show source type
+      const sourceType = isValidUrl(input) ? 'URL' : 'file';
+      console.log(chalk.gray(`📍 Source: ${sourceType} - ${input}`));
 
       // Prepare conversion options
       const conversionOptions: ConversionOptions = {
@@ -73,19 +78,42 @@ program
 
 program
   .command('analyze')
-  .description('Analyze a VSCode theme file and show available colors')
-  .argument('<input>', 'Path to VSCode theme JSON file')
+  .description('Analyze a VSCode theme file or URL and show available colors')
+  .argument('<input>', 'Path to VSCode theme JSON file or URL to theme file')
   .option('--show-tokens', 'Show token color information')
   .action(async (input: string, options: any) => {
     try {
-      if (!fs.existsSync(input)) {
-        console.error(chalk.red(`❌ Input file not found: ${input}`));
+      // Validate input (file or URL)
+      if (!isValidUrl(input) && !fs.existsSync(input)) {
+        console.error(chalk.red(`❌ Input file not found and not a valid URL: ${input}`));
         process.exit(1);
       }
 
       console.log(chalk.blue('🔍 Analyzing VSCode theme...'));
       
-      const themeContent = JSON.parse(fs.readFileSync(input, 'utf-8'));
+      // Show source type
+      const sourceType = isValidUrl(input) ? 'URL' : 'file';
+      console.log(chalk.gray(`📍 Source: ${sourceType} - ${input}`));
+      
+      let themeContent;
+      if (isValidUrl(input)) {
+        // Fetch and clean the theme content
+        const { fetchUrlContent } = require('./utils');
+        const content = await fetchUrlContent(input);
+        
+        // Clean the JSON content (same logic as converter)
+        let cleaned = content;
+        cleaned = cleaned.replace(/\/\*[\s\S]*?\*\//g, '');
+        cleaned = cleaned.replace(/\/\/.*$/gm, '');
+        cleaned = cleaned.replace(/,(\s*[}\]])/g, '$1');
+        cleaned = cleaned.replace(/"([^"]*[\x00-\x1F][^"]*)"/g, (match: string, content: string) => {
+          return '"' + content.replace(/[\x00-\x1F]/g, '') + '"';
+        });
+        
+        themeContent = JSON.parse(cleaned);
+      } else {
+        themeContent = JSON.parse(fs.readFileSync(input, 'utf-8'));
+      }
       
       console.log(chalk.green(`\n📋 Theme Information:`));
       console.log(`  Name: ${chalk.cyan(themeContent.name || 'Unknown')}`);

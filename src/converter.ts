@@ -7,7 +7,9 @@ import {
   normalizeColor, 
   setNestedProperty, 
   generateTailwindColorName,
-  deepMerge 
+  deepMerge,
+  isValidUrl,
+  fetchUrlContent
 } from './utils';
 
 export class ThemeConverter {
@@ -24,7 +26,7 @@ export class ThemeConverter {
   }
 
   /**
-   * Converts a VSCode theme file to Tailwind CSS configuration
+   * Converts a VSCode theme file or URL to Tailwind CSS configuration
    */
   async convertThemeFile(inputPath: string, outputPath?: string): Promise<TailwindConfig> {
     const themeContent = await this.readThemeFile(inputPath);
@@ -73,19 +75,50 @@ export class ThemeConverter {
   }
 
   /**
-   * Reads and parses a VSCode theme file
+   * Reads and parses a VSCode theme file or fetches from URL
    */
-  private async readThemeFile(filePath: string): Promise<VSCodeTheme> {
+  private async readThemeFile(input: string): Promise<VSCodeTheme> {
     try {
-      const content = await fs.promises.readFile(filePath, 'utf-8');
+      let content: string;
       
-      // Remove JSON comments if present (VSCode themes sometimes have them)
-      const cleanContent = content.replace(/\/\*[\s\S]*?\*\/|\/\/.*$/gm, '');
+      if (isValidUrl(input)) {
+        // Fetch content from URL
+        content = await fetchUrlContent(input);
+      } else {
+        // Read from local file
+        content = await fs.promises.readFile(input, 'utf-8');
+      }
+      
+      // Clean up the JSON content for VSCode themes
+      let cleanContent = this.cleanVSCodeThemeJson(content);
       
       return JSON.parse(cleanContent);
     } catch (error) {
-      throw new Error(`Failed to read theme file: ${error}`);
+      const source = isValidUrl(input) ? 'URL' : 'file';
+      throw new Error(`Failed to read theme ${source}: ${error}`);
     }
+  }
+
+  /**
+   * Cleans VSCode theme JSON content to make it parseable
+   */
+  private cleanVSCodeThemeJson(content: string): string {
+    let cleaned = content;
+    
+    // Remove JSON comments (both single line and multi-line)
+    cleaned = cleaned.replace(/\/\*[\s\S]*?\*\//g, '');
+    cleaned = cleaned.replace(/\/\/.*$/gm, '');
+    
+    // Remove trailing commas
+    cleaned = cleaned.replace(/,(\s*[}\]])/g, '$1');
+    
+    // Handle special characters in string values (like the schema URL)
+    // Replace problematic characters in string values
+    cleaned = cleaned.replace(/"([^"]*[\x00-\x1F][^"]*)"/g, (match: string, content: string) => {
+      return '"' + content.replace(/[\x00-\x1F]/g, '') + '"';
+    });
+    
+    return cleaned;
   }
 
   /**

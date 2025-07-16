@@ -123,3 +123,29 @@ export function deepMerge(target: any, source: any): any {
 function isObject(item: any): boolean {
   return item && typeof item === 'object' && !Array.isArray(item);
 }
+/**
+ * Checks if a string is a valid URL
+ */
+export function isValidUrl(input: string): boolean {
+  try {
+    const url = new URL(input);
+    return url.protocol === 'http:' || url.protocol === 'https:';
+  } catch {
+    return false;
+  }
+}
+
+/**
+ * Fetches content from a URL
+ */
+export async function fetchUrlContent(url: string): Promise<string> {
+  try {
+    const response = await fetch(url);
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    return await response.text();
+  } catch (error) {
+    throw new Error(`Failed to fetch URL content: ${error instanceof Error ? error.message : String(error)}`);
+  }
+}
